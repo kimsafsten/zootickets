@@ -1,10 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
-type TicketType =
-    | "day-ticket"
-    | "two-day-ticket"
-    | "season-ticket"
-    | "family-ticket";
+export const ValidTicketTypes = [
+    "day-ticket",
+    "two-day-ticket",
+    "season-ticket",
+    "family-ticket"
+] as const;
+
+export type TicketType = (typeof ValidTicketTypes)[number];
 
 interface ITicket {
     code: string;
@@ -17,7 +20,7 @@ interface ITicket {
 
 const ticketSchema = new Schema<ITicket>({
     code: { type: String, required: true, unique: true },
-    type: { type: String, required: true, enum: ["day-ticket", "two-day-ticket", "season-ticket", "family-ticket"] },
+    type: { type: String, required: true, enum: ValidTicketTypes },
     createdAt: { type: Date, default: Date.now },
     activationDeadline: { type: Date, required: true },
     activatedAt: { type: Date, default: null },

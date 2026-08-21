@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
 
-const mongoDbUrl = "mongodb://localhost:27017/zootickets";
+process.loadEnvFile();
+
+const mongoDbUrl = process.env.MONGODB_URI;
 
 const connectDB = async () => {
     try {
+        if (!mongoDbUrl) {
+            throw new Error("MONGODB_URI is not set");
+            }
         await mongoose.connect(mongoDbUrl);
         console.log("MongoDB connected");
     } catch (error) {
