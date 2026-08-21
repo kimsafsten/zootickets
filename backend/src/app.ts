@@ -6,9 +6,11 @@ import {
   getExpiresAt,
   isPastActivationDeadline,
 } from "./utils/ticketDates.ts";
+import cors from "cors";
 
 export const app: Express = express();
 
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 app.get("/tickets", async(req: Request, res: Response) => {
@@ -64,6 +66,11 @@ app.patch("/tickets/:code/activate", async(req: Request, res: Response) => {
     return;
   }
 
+  if (ticket.activatedAt !== null) {
+    res.status(400).json({ message: "Ticket already used" });
+    return;
+  }
+
   ticket.activatedAt = new Date();
   ticket.expiresAt = getExpiresAt(ticket.type, ticket.activatedAt);
   await ticket.save();
@@ -85,7 +92,7 @@ app.delete("/tickets/:code", async(req: Request, res: Response) => {
     return;
   }
 
-  await ticket.deleteOne({ code: req.params.code });
+  await ticket.deleteOne();
   res.status(200).json({ message: 'Ticket deleted' });
 });
   

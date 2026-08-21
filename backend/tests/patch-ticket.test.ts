@@ -3,6 +3,7 @@ import request from "supertest";
 import mongoose from "mongoose";
 import { app } from '../src/app.ts';
 import { Ticket } from "../src/models/Ticket.ts";
+import { vi } from "vitest";
 
 describe("PATCH /tickets/:code/activate", () => {
     beforeAll(async () => {
@@ -50,4 +51,35 @@ describe("PATCH /tickets/:code/activate", () => {
         expect(expiresAt.getHours()).toBe(23);
         expect(expiresAt.getMinutes()).toBe(59);
     });
+
+    it("should not activate an already used ticket", async () => {
+        const createResponse = await request(app)
+          .post("/tickets")
+          .send({ type: "day-ticket" });
+      
+        const code = createResponse.body.code;
+      
+        await request(app).patch(`/tickets/${code}/activate`);
+        const second = await request(app).patch(`/tickets/${code}/activate`);
+      
+        expect(second.status).toBe(400);
+      });
+
+      it("should reject activation after activationDeadline", async () => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date("2026-06-15T10:00:00"));
+
+
+        const createResponse = await request(app)
+          .post("/tickets")
+          .send({ type: "day-ticket" });
+        vi.setSystemTime(new Date("2027-01-01T10:00:00"));
+
+        const response = await request(app).patch(
+          `/tickets/${createResponse.body.code}/activate`
+        );
+        
+        expect(response.status).toBe(400);
+        vi.useRealTimers();
+      });
 });
