@@ -1,3 +1,5 @@
+import { TICKET_TYPE_LABELS } from "../lib/ticketTypes";
+
 type Ticket = {
     code: string;
     type: string;
@@ -24,9 +26,13 @@ type Ticket = {
 
     <ul>
         {tickets.map((ticket) => (
-          <li key={ticket.code}>{ticket.code} {ticket.activatedAt ? "använd" : "ej använd"}
-          {!ticket.activatedAt && (<button onClick={() => deleteTicket(ticket.code)}>Radera</button>)}
-          </li>
+          <li key={ticket.code}>
+          {ticket.code} — {TICKET_TYPE_LABELS[ticket.type] ?? ticket.type}{" "}
+          {ticket.activatedAt ? "använd" : "ej använd"}
+          {!ticket.activatedAt && (
+            <button onClick={() => deleteTicket(ticket.code)}>Radera</button>
+          )}
+        </li>
         ))}
       </ul>
     );

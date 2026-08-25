@@ -16,7 +16,7 @@ it("should show create ticket button", () => {
       }));
  
      render(<CreateTicket onCreated={vi.fn()} />);
-     expect(screen.getByRole("button", { name: /skapa biljett/i })).toBeInTheDocument();
+     expect(screen.getByRole("button", { name: /köp biljett/i })).toBeInTheDocument();
    });
  
    it("should call API when creating ticket", async () => {
@@ -28,7 +28,7 @@ it("should show create ticket button", () => {
       }));
      
      render(<CreateTicket onCreated={vi.fn()} />);
-     await userEvent.click(screen.getByRole("button", { name: /skapa biljett/i }));
+     await userEvent.click(screen.getByRole("button", { name: /köp biljett/i }));
  
      expect(fetch).toHaveBeenCalledWith(
        "http://localhost:3005/tickets",
@@ -47,9 +47,33 @@ it("should show create ticket button", () => {
       }));
  
      render(<CreateTicket onCreated={vi.fn()} />);
-     await userEvent.click(screen.getByRole("button", { name: /skapa biljett/i }));
+     await userEvent.click(screen.getByRole("button", { name: /köp biljett/i }));
  
      expect(await screen.findByText("test-uuid")).toBeInTheDocument();
    })
+
+   it("should send selected ticket type to API", async () => {
+    process.env.NEXT_PUBLIC_API_URL = "http://localhost:3005";
+  
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ code: "test-uuid", type: "season-ticket" }),
+    }));
+  
+    render(<CreateTicket onCreated={vi.fn()} />);
+  
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: /biljettyp/i }),
+      "season-ticket"
+    );
+    await userEvent.click(screen.getByRole("button", { name: /köp biljett/i }));
+  
+    expect(fetch).toHaveBeenCalledWith(
+      "http://localhost:3005/tickets",
+      expect.objectContaining({
+        body: JSON.stringify({ type: "season-ticket" }),
+      })
+    );
+  });
    
   });

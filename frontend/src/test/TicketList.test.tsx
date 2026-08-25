@@ -4,9 +4,12 @@ import TicketList from "../app/components/TicketList";
 import userEvent from "@testing-library/user-event";
 
 describe("TicketList", () => {
-  afterEach(() => cleanup());
+    afterEach(() => {
+      cleanup();
+      vi.unstubAllGlobals();
+    });
 
-  it("should show tickets with status", () => {
+    it("should show tickets with status", () => {
     render(
       <TicketList onDeleted={vi.fn()}
         tickets={[
@@ -18,6 +21,7 @@ describe("TicketList", () => {
 
     expect(screen.getByText(/abc-123.*ej använd/i)).toBeInTheDocument();
     expect(screen.getByText(/def-456.*använd/i)).toBeInTheDocument();
+    expect(screen.getByText(/abc-123.*Dagsbiljett/i)).toBeInTheDocument();
   });
   
   it("should delete unused ticket", async () => {
@@ -32,6 +36,7 @@ describe("TicketList", () => {
         onDeleted={onDeleted}
       />
     );
+
     await userEvent.click(screen.getByRole("button", { name: /radera/i }));
     expect(fetch).toHaveBeenCalledWith(
       "http://localhost:3005/tickets/abc-123",

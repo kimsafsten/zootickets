@@ -1,0 +1,22 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .select,
+  .button {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  .button {
+    background: #2d6a4f;
+    color: white;
+    cursor: pointer;
+  }
+  .code {
+    font-family: monospace;
+    padding: 0.5rem;
+    background: #f5f5f5;
+    border-radius: 4px;
+  }
