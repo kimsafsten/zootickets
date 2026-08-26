@@ -28,7 +28,7 @@ describe("ActivateTicket", () => {
     render(<ActivateTicket onActivated={onActivated} />);
 
     await userEvent.type(screen.getByRole("textbox"), "abc-123");
-    await userEvent.click(screen.getByRole("button", { name: /använd biljett/i }));
+    await userEvent.click(screen.getByRole("button", { name: /aktivera biljett/i }));
 
     expect(fetch).toHaveBeenCalledWith(
       "http://localhost:3005/tickets/abc-123/activate",

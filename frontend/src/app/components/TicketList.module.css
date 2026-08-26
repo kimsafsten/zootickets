@@ -1,0 +1,63 @@
+.list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fafafa;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .code {
+    font-family: monospace;
+    font-weight: bold;
+  }
+  
+  .type {
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  .statusUnused {
+    color: #666;
+    font-size: 0.85rem;
+  }
+  
+  .statusUsed {
+    color: #2d6a4f;
+    font-size: 0.85rem;
+  }
+  
+  .deleteButton {
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #c0392b;
+    background: #fff;
+    color: #c0392b;
+    cursor: pointer;
+  }
+  
+  .deleteButton:hover {
+    background: #c0392b;
+    color: white;
+  }
+  
+  .empty {
+    color: #666;
+    font-style: italic;
+  }

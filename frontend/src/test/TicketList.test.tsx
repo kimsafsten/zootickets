@@ -19,9 +19,11 @@ describe("TicketList", () => {
       />
     );
 
-    expect(screen.getByText(/abc-123.*ej använd/i)).toBeInTheDocument();
-    expect(screen.getByText(/def-456.*använd/i)).toBeInTheDocument();
-    expect(screen.getByText(/abc-123.*Dagsbiljett/i)).toBeInTheDocument();
+    expect(screen.getByText("abc-123")).toBeInTheDocument();
+    expect(screen.getByText("def-456")).toBeInTheDocument();
+    expect(screen.getByText(/Dagsbiljett/i)).toBeInTheDocument();
+    expect(screen.getByText("Ej använd")).toBeInTheDocument();
+    expect(screen.getByText("Använd")).toBeInTheDocument();
   });
   
   it("should delete unused ticket", async () => {

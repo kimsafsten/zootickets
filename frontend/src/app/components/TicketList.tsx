@@ -1,4 +1,5 @@
 import { TICKET_TYPE_LABELS } from "../lib/ticketTypes";
+import styles from "./TicketList.module.css";
 
 type Ticket = {
     code: string;
@@ -22,18 +23,37 @@ type Ticket = {
         }
         onDeleted();
     }
-    return (
 
-    <ul>
-        {tickets.map((ticket) => (
-          <li key={ticket.code}>
-          {ticket.code} — {TICKET_TYPE_LABELS[ticket.type] ?? ticket.type}{" "}
-          {ticket.activatedAt ? "använd" : "ej använd"}
-          {!ticket.activatedAt && (
-            <button onClick={() => deleteTicket(ticket.code)}>Radera</button>
-          )}
-        </li>
-        ))}
-      </ul>
+    return (
+        <ul className={styles.list}>
+            {tickets.length === 0 && (
+            <li className={styles.empty}>Inga biljetter ännu</li>
+            )}
+            {tickets.map((ticket) => (
+            <li key={ticket.code} className={styles.item}>
+                <div className={styles.info}>
+                <span className={styles.code}>{ticket.code}</span>
+                <span className={styles.type}>
+                    {TICKET_TYPE_LABELS[ticket.type] ?? ticket.type}
+                </span>
+                <span
+                    className={
+                    ticket.activatedAt ? styles.statusUsed : styles.statusUnused
+                    }
+                >
+                    {ticket.activatedAt ? "Använd" : "Ej använd"}
+                </span>
+                </div>
+                {!ticket.activatedAt && (
+                <button
+                    className={styles.deleteButton}
+                    onClick={() => deleteTicket(ticket.code)}
+                >
+                    Radera
+                </button>
+                )}
+            </li>
+            ))}
+        </ul>
     );
 }

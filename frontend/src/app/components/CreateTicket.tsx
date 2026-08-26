@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { TICKET_TYPE_LABELS } from "../lib/ticketTypes";
-import styles from "../CreateTicket.module.css";
+import styles from "./CreateTicket.module.css";
 
 type Props = { onCreated: () => void };
 

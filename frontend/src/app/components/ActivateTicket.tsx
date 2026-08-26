@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import styles from "./ActivateTicket.module.css";
 
 type Props = {
   onActivated: () => void;
@@ -23,13 +24,16 @@ export default function ActivateTicket({ onActivated }: Props) {
   }
 
   return (
-    <div>
+    <div className={styles.form}>
       <input
+        className={styles.input}
         value={code}
         onChange={(e) => setCode(e.target.value)}
         placeholder="Biljettkod"
       />
-      <button onClick={activateTicket}>Använd biljett</button>
+      <button className={styles.button} onClick={activateTicket}>
+        Aktivera biljett
+      </button>
     </div>
   );
 }
