@@ -25,7 +25,17 @@ export default function Home() {
   }
 
   useEffect(() => {
-    loadTickets();
+    async function fetchTickets() {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets`);
+      if (!response.ok) {
+        throw new Error("Failed to load tickets");
+      }
+
+      const data = await response.json();
+      setTickets(data);
+    }
+
+    void fetchTickets();
   }, []);
 
   return (

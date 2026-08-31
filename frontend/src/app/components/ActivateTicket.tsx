@@ -9,18 +9,46 @@ type Props = {
 
 export default function ActivateTicket({ onActivated }: Props) {
   const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   async function activateTicket() {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/tickets/${code}/activate`,
-      { method: "PATCH" }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to activate ticket");
+    if (!code.trim()) {
+      setError("Ange en biljettkod.");
+      return;
     }
 
-    onActivated();
+    const confirmed = window.confirm(
+      "Tänk på att en aktiverad dags- eller familjebiljett endast gäller " +
+        "under aktiveringsdagen. En tvådagarsbiljett gäller även följande dag. " +
+        "En säsongsbiljett gäller till årets slut. Vill du aktivera biljetten?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/tickets/${encodeURIComponent(code.trim())}/activate`,
+        { method: "PATCH" }
+      );
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.message ?? "Biljetten kunde inte aktiveras.");
+      }
+
+      setCode("");
+      onActivated();
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Biljetten kunde inte aktiveras."
+      );
+    }
   }
 
   return (
@@ -34,6 +62,11 @@ export default function ActivateTicket({ onActivated }: Props) {
       <button className={styles.button} onClick={activateTicket}>
         Aktivera biljett
       </button>
+      {error && (
+        <p className={styles.error} role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

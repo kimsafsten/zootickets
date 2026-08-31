@@ -5,6 +5,9 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
+    "dev": "node --watch src/server.ts",
+    "start": "node src/server.ts",
+    "typecheck": "tsc --noEmit",
     "test": "vitest --fileParallelism=false"
   },
   "dependencies": {

@@ -20,3 +20,8 @@
   .button:hover {
     background: #245a42;
   }
+
+  .error {
+    color: #b42318;
+    font-weight: 600;
+  }
