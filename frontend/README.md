@@ -1,5 +1,12 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Project Information
+
+- Author: Kim Säfsten
+- Class: SYS25D
+- Course: API-utveckling Node.js
+- School: Medieinstitutet
+
 ## Getting Started
 
 First, run the development server:

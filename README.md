@@ -1,21 +1,28 @@
 # Zootickets
 
-Zootickets är ett enkelt fullstack-biljettsystem byggt med Next.js, React, Node.js, Express och MongoDB.
+Zootickets is a simple full-stack ticket system built with Next.js, React, Node.js, Express, and MongoDB.
 
-> **Observera:** Projektet är en demoversion skapad i utbildningssyfte. Det är inte avsett att användas som ett färdigt biljettsystem i produktion.
+## Project Information
 
-I systemet kan en användare:
+- Author: Kim Säfsten
+- Class: SYS25D
+- Course: API-utveckling Node.js
+- School: Medieinstitutet
 
-- Skapa en biljett med en slumpmässig och unik kod
-- Välja mellan flera biljettyper
-- Aktivera en biljett genom att ange biljettkoden
-- Se om en biljett är använd eller oanvänd
-- Lista alla biljetter
-- Radera en biljett som ännu inte har aktiverats
+> **Note:** This project is a demo version created for educational purposes. It is not intended to be used as a production-ready ticket system.
 
-En aktiverad biljett kan inte aktiveras igen eller raderas.
+In the system, a user can:
 
-## Teknik
+- Create a ticket with a random and unique code
+- Choose between multiple ticket types
+- Activate a ticket by entering the ticket code
+- See if a ticket is used or unused
+- List all tickets
+- Delete a ticket that has not yet been activated
+
+An activated ticket cannot be activated again or deleted.
+
+## Technology
 
 ### Frontend
 
@@ -35,11 +42,11 @@ En aktiverad biljett kan inte aktiveras igen eller raderas.
 - Vitest
 - Supertest
 
-### Databas
+### Database
 
 - MongoDB
 
-## Projektstruktur
+## Project Structure
 
 ```text
 zootickets/
@@ -58,9 +65,9 @@ zootickets/
 └── README.md
 ```
 
-## Databasdesign
+## Database Design
 
-Varje dokument i samlingen `tickets` representerar en biljett.
+Each document in the `tickets` collection represents a ticket.
 
 ```mermaid
 erDiagram
@@ -75,138 +82,138 @@ erDiagram
     }
 ```
 
-Fält:
+Fields:
 
-- `_id`: MongoDB:s unika id för dokumentet
-- `code`: slumpmässigt genererad och unik biljettkod
-- `type`: biljettens typ
-- `createdAt`: när biljetten skapades
-- `activationDeadline`: sista tidpunkt då biljetten kan aktiveras
-- `activatedAt`: när biljetten aktiverades, eller `null` om den är oanvänd
-- `expiresAt`: när den aktiverade biljetten slutar gälla, eller `null` om den är oanvänd
+- `_id`: MongoDB's unique ID for the document
+- `code`: randomly generated and unique ticket code
+- `type`: the ticket type
+- `createdAt`: when the ticket was created
+- `activationDeadline`: the last time the ticket can be activated
+- `activatedAt`: when the ticket was activated, or `null` if unused
+- `expiresAt`: when the activated ticket expires, or `null` if unused
 
-Tillåtna biljettyper är:
+Allowed ticket types are:
 
 - `day-ticket`
 - `two-day-ticket`
 - `season-ticket`
 - `family-ticket`
 
-## Hur Node.js och MongoDB samarbetar
+## How Node.js and MongoDB Work Together
 
-Backendservern körs med Node.js och använder Express för att ta emot HTTP-anrop från frontend.
+The backend server runs with Node.js and uses Express to receive HTTP requests from the frontend.
 
-Mongoose används för att ansluta Node.js-applikationen till MongoDB. Biljettmodellen beskriver vilka fält ett biljettdokument ska innehålla och vilka regler som gäller, till exempel att biljettkoden måste vara unik.
+Mongoose is used to connect the Node.js application to MongoDB. The Ticket model describes which fields a ticket document should contain and what rules apply, such as the ticket code must be unique.
 
-När backend tar emot ett anrop använder den Mongoose för att skapa, läsa, uppdatera eller radera dokument i MongoDB. Resultatet skickas sedan tillbaka till frontend som JSON.
+When the backend receives a request, it uses Mongoose to create, read, update, or delete documents in MongoDB. The result is then sent back to the frontend as JSON.
 
-Flödet ser förenklat ut så här:
+The flow looks simplified like this:
 
 ```text
 Frontend → Express API → Mongoose → MongoDB
-Frontend ← JSON-svar ← Express API ← MongoDB
+Frontend ← JSON response ← Express API ← MongoDB
 ```
 
 ## CORS
 
-Frontend och backend körs på olika adresser under utveckling:
+The frontend and backend run at different addresses during development:
 
 - Frontend: `http://localhost:3000`
 - Backend: `http://localhost:3005`
 
-Webbläsaren betraktar dessa som olika origins eftersom portnumren skiljer sig. Webbläsarens same-origin-policy skulle därför normalt blockera frontend från att anropa backend.
+The browser treats these as different origins because the port numbers differ. The browser's same-origin policy would normally block the frontend from calling the backend.
 
-Backend använder paketet `cors` och tillåter anrop från frontendadressen:
+The backend uses the `cors` package and allows requests from the frontend address:
 
 ```ts
 app.use(cors({ origin: "http://localhost:3000" }));
 ```
 
-Det innebär att backend skickar rätt CORS-header och att webbläsaren tillåter kommunikationen mellan applikationens två delar.
+This means the backend sends the correct CORS headers and the browser allows communication between the two parts of the application.
 
-## Förutsättningar
+## Requirements
 
-För att köra projektet behövs:
+To run the project, you need:
 
-- Node.js 20.12 eller senare
+- Node.js 20.12 or later
 - npm
-- En MongoDB-server som körs lokalt
+- A MongoDB server running locally
 
-## Miljövariabler
+## Environment Variables
 
-Skapa filen `backend/.env`:
+Create the file `backend/.env`:
 
 ```env
 MONGODB_URI=mongodb://127.0.0.1:27017/zootickets
 MONGODB_URI_TEST=mongodb://127.0.0.1:27017/zootickets_test
 ```
 
-Skapa filen `frontend/.env.local`:
+Create the file `frontend/.env.local`:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3005
 ```
 
-Miljöfilerna ska inte committas eftersom de kan innehålla känslig information.
+Environment files should not be committed as they may contain sensitive information.
 
 ## Installation
 
-Installera backendens paket:
+Install backend dependencies:
 
 ```bash
 cd backend
 npm install
 ```
 
-Installera frontendens paket:
+Install frontend dependencies:
 
 ```bash
 cd frontend
 npm install
 ```
 
-## Starta projektet
+## Start the Project
 
-MongoDB måste vara igång innan backend startas.
+MongoDB must be running before the backend is started.
 
-Starta backend från mappen `backend`:
-
-```bash
-npm run dev
-```
-
-Backend körs på `http://localhost:3005`.
-
-Öppna därefter en andra terminal och starta frontend från mappen `frontend`:
+Start the backend from the `backend` folder:
 
 ```bash
 npm run dev
 ```
 
-Frontend kan öppnas på `http://localhost:3000`.
+The backend runs on `http://localhost:3005`.
 
-## API-endpoints
+Then open a second terminal and start the frontend from the `frontend` folder:
 
-### Lista alla biljetter
+```bash
+npm run dev
+```
+
+The frontend can be opened at `http://localhost:3000`.
+
+## API Endpoints
+
+### List all tickets
 
 ```http
 GET /tickets
 ```
 
-### Hämta en biljett
+### Get a ticket
 
 ```http
 GET /tickets/:code
 ```
 
-### Skapa en biljett
+### Create a ticket
 
 ```http
 POST /tickets
 Content-Type: application/json
 ```
 
-Exempel på request body:
+Example request body:
 
 ```json
 {
@@ -214,85 +221,85 @@ Exempel på request body:
 }
 ```
 
-### Aktivera en biljett
+### Activate a ticket
 
 ```http
 PATCH /tickets/:code/activate
 ```
 
-En biljett kan endast aktiveras en gång och måste aktiveras före sitt sista aktiveringsdatum.
+A ticket can only be activated once and must be activated before its activation deadline.
 
-### Radera en biljett
+### Delete a ticket
 
 ```http
 DELETE /tickets/:code
 ```
 
-Endast biljetter som inte har aktiverats kan raderas.
+Only tickets that have not been activated can be deleted.
 
-## Tester
+## Tests
 
-Backendtester:
+Backend tests:
 
 ```bash
 cd backend
 npm test -- --run
 ```
 
-Frontendtester:
+Frontend tests:
 
 ```bash
 cd frontend
 npm test -- --run
 ```
 
-Kontrollera backendens TypeScript:
+Check backend TypeScript:
 
 ```bash
 cd backend
 npm run typecheck
 ```
 
-Kontrollera frontendens kod:
+Check frontend code:
 
 ```bash
 cd frontend
 npm run lint
 ```
 
-Skapa ett produktionsbygge av frontend:
+Create a production build of the frontend:
 
 ```bash
 cd frontend
 npm run build
 ```
 
-Projektet innehåller tester för bland annat:
+The project includes tests for, among other things:
 
-- Skapande av biljetter
-- Validering av biljettyp
-- Lagring i databasen
-- Listning av biljetter
-- Aktivering av biljetter
-- Skydd mot återanvändning
-- Radering av oanvända biljetter
-- Visning och anrop i frontend
+- Creating tickets
+- Validating ticket types
+- Storing in the database
+- Listing tickets
+- Activating tickets
+- Protection against reuse
+- Deleting unused tickets
+- Displaying and calling in the frontend
 
-## Arbetssätt
+## Approach
 
-Projektet har utvecklats med inspiration från metoden red, green, refactor:
+The project has been developed with inspiration from the red, green, refactor approach:
 
-1. Ett test skrivs och misslyckas.
-2. Den minsta kod som får testet att passera skrivs.
-3. Koden förbättras utan att testet slutar fungera.
+1. A test is written and fails.
+2. The minimal code to make the test pass is written.
+3. The code is improved without the test stopping working.
 
-## Problem och lösning
+## Problem and Solution
 
-Backendens integrationstester använder Vitest och Supertest mot en gemensam MongoDB-testdatabas. Varje testfil rensar databasen med `Ticket.deleteMany({})` efter sina tester.
+The backend integration tests use Vitest and Supertest against a shared MongoDB test database. Each test file cleans the database with `Ticket.deleteMany({})` after its tests.
 
-Vitest kör testfiler parallellt som standard. Det innebar att en testfil kunde radera biljetter medan en annan testfil fortfarande använde dem. Resultatet blev oregelbundna fel, bland annat 404-svar och timeouts. Testerna kunde passera när de kördes separat men misslyckas när hela testsviten kördes.
+Vitest runs test files in parallel by default. This meant one test file could delete tickets while another test file was still using them. The result was sporadic errors, including 404 responses and timeouts. The tests could pass when run separately but fail when the entire test suite ran.
 
-Problemet löstes genom att köra testfilerna sekventiellt:
+The problem was solved by running test files sequentially:
 
 ```json
 "test": "vitest --fileParallelism=false"
