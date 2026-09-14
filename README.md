@@ -123,10 +123,10 @@ The frontend and backend run at different addresses during development:
 
 The browser treats these as different origins because the port numbers differ. The browser's same-origin policy would normally block the frontend from calling the backend.
 
-The backend uses the `cors` package and allows requests from the frontend address:
+The backend uses the `cors` package and allows requests from the frontend address configured in `FRONTEND_ORIGIN`. If the variable is not set, it falls back to `http://localhost:3000`:
 
 ```ts
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: process.env.FRONTEND_ORIGIN || "http://localhost:3000" }));
 ```
 
 This means the backend sends the correct CORS headers and the browser allows communication between the two parts of the application.
@@ -144,6 +144,8 @@ To run the project, you need:
 Create the file `backend/.env`:
 
 ```env
+PORT=3005
+FRONTEND_ORIGIN=http://localhost:3000
 MONGODB_URI=mongodb://127.0.0.1:27017/zootickets
 MONGODB_URI_TEST=mongodb://127.0.0.1:27017/zootickets_test
 ```
@@ -305,25 +307,25 @@ The problem was solved by running test files sequentially:
 "test": "vitest --fileParallelism=false"
 ```
 
-Lärdomen är att integrationstester som delar databas antingen behöver köras sekventiellt eller använda en separat databas för varje testfil eller worker.
+The lesson is that integration tests that share a database should either run sequentially or use a separate database per test file or worker.
 
-## Säkerhet och fortsatt utveckling
+## Security and Future Improvements
 
-Det här projektet är en demoversion och innehåller därför ingen inloggning eller behörighetskontroll. Alla som har tillgång till API:t kan lista biljetter och radera oanvända biljetter.
+This project is a demo version and therefore does not include login or authorization. Anyone with access to the API can list tickets and delete unused tickets.
 
-Backend kontrollerar redan att:
+The backend already checks that:
 
-- Endast godkända biljettyper kan skapas
-- En biljett inte kan aktiveras efter sista aktiveringsdatum
-- En biljett inte kan aktiveras flera gånger
-- En aktiverad biljett inte kan raderas
+- Only approved ticket types can be created
+- A ticket cannot be activated after the activation deadline
+- A ticket cannot be activated more than once
+- An activated ticket cannot be deleted
 
-En färdig produkt skulle även behöva innehålla:
+A production-ready version would also need:
 
-- Inloggning och säker autentisering
-- Olika behörigheter för kunder och administratörer
-- Skyddade API-endpoints
-- Säker hantering av användaruppgifter
-- Loggning av viktiga händelser
-- Begränsning av upprepade anrop
-- Anpassad konfiguration för produktion
+- Login and secure authentication
+- Different permissions for customers and administrators
+- Protected API endpoints
+- Secure handling of user data
+- Logging of important events
+- Rate limiting for repeated requests
+- Environment-specific production configuration
