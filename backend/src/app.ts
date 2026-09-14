@@ -7,6 +7,7 @@ import {
   isPastActivationDeadline,
 } from "./utils/ticketDates.ts";
 import cors from "cors";
+import { errorHandler } from "./error-handler.ts";
 
 export const app: Express = express();
 const frontendOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
@@ -99,4 +100,6 @@ app.delete("/tickets/:code", async(req: Request, res: Response) => {
   await ticket.deleteOne();
   res.status(200).json({ message: 'Ticket deleted' });
 });
+
+app.use(errorHandler);
   
