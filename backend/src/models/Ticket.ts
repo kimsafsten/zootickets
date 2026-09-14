@@ -23,6 +23,7 @@ const ticketSchema = new Schema<ITicket>({
     type: { type: String, required: true, enum: ValidTicketTypes },
     createdAt: { type: Date, default: Date.now },
     activationDeadline: { type: Date, required: true },
+    // These stay null until the ticket is activated for the first time.
     activatedAt: { type: Date, default: null },
     expiresAt: { type: Date, default: null },
 });

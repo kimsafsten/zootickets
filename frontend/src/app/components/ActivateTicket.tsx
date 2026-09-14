@@ -30,6 +30,7 @@ export default function ActivateTicket({ onActivated }: Props) {
     setError(null);
 
     try {
+      // Trim pasted input and encode it before putting it into the URL path.
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/tickets/${encodeURIComponent(code.trim())}/activate`,
         { method: "PATCH" }

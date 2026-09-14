@@ -15,6 +15,7 @@ type Ticket = {
 export default function Home() {
     const [tickets, setTickets] = useState<Ticket[]>([]);
   
+  // Reused after create, activate, and delete so the list stays in sync.
   async function loadTickets() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets`);
     if (!response.ok) {
@@ -25,6 +26,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    // Initial page load fetches the current ticket state from the backend.
     async function fetchTickets() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tickets`);
       if (!response.ok) {

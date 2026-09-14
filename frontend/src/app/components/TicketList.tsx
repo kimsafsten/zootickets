@@ -21,6 +21,7 @@ type Ticket = {
         if (!response.ok) {
             throw new Error("Failed to delete ticket");
         }
+        // Let the parent re-fetch so this component stays stateless.
         onDeleted();
     }
 

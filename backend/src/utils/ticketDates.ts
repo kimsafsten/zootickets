@@ -5,6 +5,7 @@ export function getActivationDeadline(now = new Date()): Date {
   return new Date(year, 11, 31, 23, 59, 59, 999);
 }
 
+// Return the last millisecond of the given day, not 00:00 at the start of it.
 function midnight(year: number, month: number, day: number): Date {
   return new Date(year, month, day, 23, 59, 59, 999);
 }
@@ -14,6 +15,7 @@ export function getExpiresAt(type: TicketType, activatedAt: Date): Date {
   const month = activatedAt.getMonth();
   const day = activatedAt.getDate();
 
+  // Each ticket type converts one activation moment into a concrete expiry date.
   switch (type) {
     case "day-ticket":
     case "family-ticket":
