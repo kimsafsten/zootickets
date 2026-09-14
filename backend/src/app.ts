@@ -9,8 +9,9 @@ import {
 import cors from "cors";
 
 export const app: Express = express();
+const frontendOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: frontendOrigin }));
 app.use(express.json());
 
 app.get("/tickets", async(req: Request, res: Response) => {

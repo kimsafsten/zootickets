@@ -1,7 +1,7 @@
 import { app } from "./app.ts";
 import connectDb from "./db.ts";
 
-const PORT = 3005;
+const PORT = Number(process.env.PORT) || 3005;
 
 await connectDb(); 
 
