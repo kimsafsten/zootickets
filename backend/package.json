@@ -2,6 +2,9 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "ticketsystem",
+  "engines": {
+    "node": ">=20.12"
+  },
   "type": "module",
   "main": "app.js",
   "scripts": {
