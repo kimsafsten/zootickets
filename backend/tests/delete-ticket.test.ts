@@ -50,4 +50,10 @@ describe("DELETE /tickets/:code", () => {
     expect(found).not.toBeNull();
   });
 
+  it("should return 404 for unknown ticket code", async () => {
+    const response = await request(app).delete("/tickets/unknown-code");
+
+    expect(response.status).toBe(404);
+  });
+
 });

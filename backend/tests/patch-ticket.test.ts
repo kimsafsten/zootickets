@@ -82,4 +82,10 @@ describe("PATCH /tickets/:code/activate", () => {
         expect(response.status).toBe(400);
         vi.useRealTimers();
       });
+
+      it("should return 404 for unknown ticket code", async () => {
+        const response = await request(app).patch("/tickets/unknown-code/activate");
+        
+        expect(response.status).toBe(404);
+      });
 });
